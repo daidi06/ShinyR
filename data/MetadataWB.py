@@ -7,10 +7,12 @@ source = pd.DataFrame(wb.source.list())
 
 def IndicatorsMetaDataWB(IndicatorId):
     for i in list(source['id']):
-        wb.db = i
-        for k,v in wb.search(userInput).metadata.items():
-            for elem in v:
-                if elem.id == IndicatorId:
-                    metadata = wb.series.metadata.get(IndicatorId)
-        break 
-    return(metadata)
+    response = urlopen(f"https://api.worldbank.org/v2/en/sources/{i}/series/{IndicatorId}/metadata?format=json")
+    json_data = response.read().decode('utf-8', 'replace')
+    try:
+        d = json.loads(json_data)
+        dimGHO = pd.json_normalize(d["source"][0]["concept"][0]['variable'][0]['metatype'])
+        break
+    except ValueError:
+        continue
+    return dimGHO

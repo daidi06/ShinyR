@@ -10,11 +10,17 @@ pd.set_option('display.max_colwidth', None)
 source = pd.DataFrame(wb.source.list())
 
 def IndicatorsDataWB(IndicatorId):
-    data=wb.data.DataFrame(IndicatorId, 
+    for i in list(source['id']):
+        wb.db = i
+        try:
+            data=wb.data.DataFrame(IndicatorId, 
                              wb.region.members('AFR'), 
                              #time = range(2000, 2023,1), 
                              skipBlanks=True, 
                              columns='series', 
                              labels = True)
-    data.reset_index()
+            data.reset_index()
+            break
+        except ValueError:
+            continue
     return(data)

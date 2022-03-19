@@ -62,7 +62,7 @@ ui <- fluidPage(
                      selectInput(inputId = "windy", 
                                  label = "Windy",
                                  choices = list("Yes"="yes", "No"="no")),
-                     actionButton(inputId = "submitbutton", label = "Submit", class='btn bnt-primary')
+                     actionButton(inputId = "PGPbutton", label = "Submit", class='btn bnt-primary')
                    ),
                    
                    mainPanel(
@@ -97,7 +97,7 @@ ui <- fluidPage(
                  sidebarLayout(
                    sidebarPanel(
                      textAreaInput("WBI", "What key words are you looking for?"),
-                     actionButton("WBbutton", "Submit", class = "btn btn-primary")
+                     actionButton("WBIbutton", "Submit", class = "btn btn-primary")
                    ),
                    
                    # Show a plot of the generated distribution
@@ -148,7 +148,7 @@ ui <- fluidPage(
                  sidebarLayout(
                    sidebarPanel(
                      textAreaInput("GHOI", "What key words are you looking for?"),
-                     actionButton("GHObutton", "Submit", class = "btn btn-primary")
+                     actionButton("GHOIbutton", "Submit", class = "btn btn-primary")
                    ),
                    
                    # Show a plot of the generated distribution
@@ -198,7 +198,7 @@ server <- function(input, output) {
   reticulate::source_python("data/DataGHO.py")
   
   #Input Data
-  datasetInput <- reactive({
+  datasetInput <- eventReactive(input$PGPbutton, {
     
     #Input data (outlook, temperature, humidity and windy) to data.frame for prediction
     df <- data.frame(
@@ -228,79 +228,85 @@ server <- function(input, output) {
   
   #Status/Output Text Box
   output$contents <- renderText({
-    if(input$submitbutton > 0){
+    if(input$PGPbutton > 0){
       isolate("Calculation complete.")
     }else{
       return("Server is ready for calculation.")
     }
   })
   
+  
+  
   #Prediction results table
   output$tabledata <- renderTable({
-    if(input$submitbutton > 0){
-      isolate(datasetInput())
-    }
+      datasetInput()
   })
   
-  sia <- reactive(get_vader(c(input$caption))[c("pos", "neu", "neg")])
   
-  
-  output$value <- renderPrint({ 
-    if (input$Vaderbutton>0) { 
-      isolate(sia()) 
-    }
-    
+  vader <- eventReactive(input$vaderbutton, {
+    get_vader(c(input$caption))[c("pos", "neu", "neg")]
   })
   
+  
+  
+  output$value <- renderPrint({
+    vader()
+  })
+  
+  
+  WBI <- eventReactive(input$WBIbutton, {
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 0, {
+                   return(SearchIndicatorsWB(input$WBI))
+                 })
+  })
   
   output$valueWBI <- DT::renderDataTable({
-    if (input$WBbutton>0) {
-      withProgress(message = 'Calculation in progress',
-                   detail = 'This may take a while...', value = 0, {
-                     return(SearchIndicatorsWB(input$WBI))
-                   })
-    }
-    
+      WBI()
+  })
+  
+  WBIM <- eventReactive(input$WBIMbutton, {
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 0, {
+                   return(IndicatorsMetaDataWB(input$WBIM))
+                 })
   })
   
   output$valueWBIM <- renderPrint({
-    if (input$WBIMbutton>0) {
-      withProgress(message = 'Calculation in progress',
-                   detail = 'This may take a while...', value = 0, {
-                     return(IndicatorsMetaDataWB(input$WBIM))
-                   })
-    }
-    
+    WBIM()
+  })
+  
+  WBID <- eventReactive(input$WBIDbutton, {
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 0, {
+                   return(IndicatorsDataWB(input$WBID))
+                 })
   })
   
   output$valueWBID <- DT::renderDataTable({
-    if (input$WBIDbutton>0) {
-      withProgress(message = 'Calculation in progress',
-                   detail = 'This may take a while...', value = 0, {
-                     return(IndicatorsDataWB(input$WBID))
-                   })
-    }
-    
+    WBID()
+  })
+  
+  GHOI <- eventReactive(input$GHOIbutton, {
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 0, {
+                   return(SearchIndicatorsGHO(input$GHOI))
+                 })
   })
   
   output$valueGHO <- DT::renderDataTable({
-    if (input$GHObutton>0) { 
-      withProgress(message = 'Calculation in progress',
-                   detail = 'This may take a while...', value = 0, {
-                     return(SearchIndicatorsGHO(input$GHOI))
-                   })
-    }
-    
+    GHOI()
+  })
+  
+  GHOID <- eventReactive(input$GHOIDbutton, {
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 0, {
+                   return(IndicatorsDataGHO(input$GHOID))
+                 })
   })
   
   output$valueGHOID <- DT::renderDataTable({
-    if (input$GHOIDbutton>0) { 
-      withProgress(message = 'Calculation in progress',
-                   detail = 'This may take a while...', value = 0, {
-                     return(IndicatorsDataGHO(input$GHOID))
-                   })
-    }
-    
+    GHOID()
   })
   
 }
