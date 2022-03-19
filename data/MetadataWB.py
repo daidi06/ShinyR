@@ -9,8 +9,8 @@ source = pd.DataFrame(wb.source.list())
 
 def IndicatorsMetaDataWB(IndicatorId):
     for i in list(source['id']):
-    response = urlopen(f"https://api.worldbank.org/v2/en/sources/{i}/series/{IndicatorId}/metadata?format=json")
-    json_data = response.read().decode('utf-8', 'replace')
+        response = urlopen(f"https://api.worldbank.org/v2/en/sources/{i}/series/{IndicatorId}/metadata?format=json")
+        json_data = response.read().decode('utf-8', 'replace')
     try:
         d = json.loads(json_data)
         dimGHO = pd.json_normalize(d["source"][0]["concept"][0]['variable'][0]['metatype'])

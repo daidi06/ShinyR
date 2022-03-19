@@ -5,9 +5,9 @@ account: jogf1d-didier-ilboudo
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5840843
-bundleId: 5702933
+bundleId: 5702938
 url: https://jogf1d-didier-ilboudo.shinyapps.io/MachineLearningModels/
-when: 1647702288.67587
-lastSyncTime: 1647702288.67587
+when: 1647702421.46978
+lastSyncTime: 1647702421.47078
 asMultiple: FALSE
 asStatic: FALSE

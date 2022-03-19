@@ -13,12 +13,12 @@ def IndicatorsDataWB(IndicatorId):
     for i in list(source['id']):
         wb.db = i
         try:
-            data=wb.data.DataFrame(IndicatorId, 
-                             wb.region.members('AFR'), 
-                             #time = range(2000, 2023,1), 
-                             skipBlanks=True, 
-                             columns='series', 
-                             labels = True)
+            data=wb.data.DataFrame(IndicatorId,
+                                   wb.region.members('AFR'),
+                                   #time = range(2000, 2023,1),
+                                   skipBlanks=True,
+                                   columns='series',
+                                   labels = True)
             data.reset_index()
             break
         except ValueError:
