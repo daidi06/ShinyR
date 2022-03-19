@@ -1,6 +1,7 @@
 import pandas as pd
-import wbgapi as wb
-
+import urllib
+from urllib.request import urlopen
+import json
 
 #Return as a dataFrame
 source = pd.DataFrame(wb.source.list())
