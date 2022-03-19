@@ -21,6 +21,6 @@ def IndicatorsDataWB(IndicatorId):
                                    labels = True)
             data.reset_index()
             break
-        except ValueError:
+        except:
             continue
     return(data)

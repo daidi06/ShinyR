@@ -4,6 +4,12 @@ from urllib.request import urlopen
 import json
 import wbgapi as wb
 
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', None)
+pd.set_option('display.max_colwidth', None)
+
+
 #Return as a dataFrame
 source = pd.DataFrame(wb.source.list())
 

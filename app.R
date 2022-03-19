@@ -85,7 +85,7 @@ ui <- fluidPage(
                    
                    # Show a plot of the generated distribution
                    mainPanel(
-                     verbatimTextOutput("value")
+                     verbatimTextOutput("valueVader")
                    )
                  )
                  ),
@@ -119,7 +119,7 @@ ui <- fluidPage(
                    
                    # Show a plot of the generated distribution
                    mainPanel(
-                     verbatimTextOutput("valueWBIM")
+                     dataTableOutput("valueWBIM")
                    )
                  )
         ),
@@ -243,13 +243,13 @@ server <- function(input, output) {
   })
   
   
-  vader <- eventReactive(input$vaderbutton, {
-    get_vader(c(input$caption))[c("pos", "neu", "neg")]
+  vader <- eventReactive(input$Vaderbutton, {
+    isolate(get_vader(c(input$caption))[c("pos", "neu", "neg")])
   })
   
   
   
-  output$value <- renderPrint({
+  output$valueVader <- renderPrint({
     vader()
   })
   
@@ -272,7 +272,7 @@ server <- function(input, output) {
                  })
   })
   
-  output$valueWBIM <- renderPrint({
+  output$valueWBIM <- DT::renderDataTable({
     WBIM()
   })
   
