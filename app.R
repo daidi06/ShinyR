@@ -106,6 +106,40 @@ ui <- fluidPage(
                    )
                  )
                  ),
+        tabPanel(title = "World Bank Indicators Metadata",
+                 titlePanel("Data & Statistic Team"),
+                 h3("Search Indicator Metadata in World Bank database"),
+                 
+                 # Sidebar with a slider input for number of bins 
+                 sidebarLayout(
+                   sidebarPanel(
+                     textAreaInput("WBIM", "Please enter the code of the indicator"),
+                     actionButton("WBIMbutton", "Submit", class = "btn btn-primary")
+                   ),
+                   
+                   # Show a plot of the generated distribution
+                   mainPanel(
+                     verbatimTextOutput("valueWBIM")
+                   )
+                 )
+        ),
+        tabPanel(title = "WB Indicator Data",
+                 titlePanel("Data & Statistic Team"),
+                 h3("View the Data of the Indicator from World Bank database"),
+                 
+                 # Sidebar with a slider input for number of bins 
+                 sidebarLayout(
+                   sidebarPanel(
+                     textAreaInput("WBID", "Please enter the code of the indicator"),
+                     actionButton("WBIDbutton", "Submit", class = "btn btn-primary")
+                   ),
+                   
+                   # Show a plot of the generated distribution
+                   mainPanel(
+                     dataTableOutput("valueWBID")
+                   )
+                 )
+        ),
         tabPanel(title = "GHO Indicators",
                  titlePanel("Data & Statistic Team"),
                  h3("Search Indicators in Global Health Observatory database"),
@@ -120,6 +154,23 @@ ui <- fluidPage(
                    # Show a plot of the generated distribution
                    mainPanel(
                      dataTableOutput("valueGHO")
+                   )
+                 )
+        ),
+        tabPanel(title = "GHO Indicator Data",
+                 titlePanel("Data & Statistic Team"),
+                 h3("View the Data of the Indicator from GHO database"),
+                 
+                 # Sidebar with a slider input for number of bins 
+                 sidebarLayout(
+                   sidebarPanel(
+                     textAreaInput("GHOID", "Please enter the code of the indicator"),
+                     actionButton("GHOIDbutton", "Submit", class = "btn btn-primary")
+                   ),
+                   
+                   # Show a plot of the generated distribution
+                   mainPanel(
+                     dataTableOutput("valueGHOID")
                    )
                  )
         ),
@@ -142,6 +193,9 @@ server <- function(input, output) {
   
   reticulate::source_python("data/SearchIndicatorsWB.py")
   reticulate::source_python("data/SearchIndicatorsGHO.py")
+  reticulate::source_python("data/IndicatorsGHO.py")
+  reticulate::source_python("data/DataWB.py")
+  reticulate::source_python("data/DataGHO.py")
   
   #Input Data
   datasetInput <- reactive({
@@ -209,11 +263,41 @@ server <- function(input, output) {
     
   })
   
+  output$valueWBIM <- renderPrint({
+    if (input$WBIMbutton>0) {
+      withProgress(message = 'Calculation in progress',
+                   detail = 'This may take a while...', value = 0, {
+                     return(IndicatorsMetaDataWB(input$WBIM))
+                   })
+    }
+    
+  })
+  
+  output$valueWBID <- DT::renderDataTable({
+    if (input$WBIDbutton>0) {
+      withProgress(message = 'Calculation in progress',
+                   detail = 'This may take a while...', value = 0, {
+                     return(IndicatorsDataWB(input$WBID))
+                   })
+    }
+    
+  })
+  
   output$valueGHO <- DT::renderDataTable({
     if (input$GHObutton>0) { 
       withProgress(message = 'Calculation in progress',
                    detail = 'This may take a while...', value = 0, {
                      return(SearchIndicatorsGHO(input$GHOI))
+                   })
+    }
+    
+  })
+  
+  output$valueGHOID <- DT::renderDataTable({
+    if (input$GHOIDbutton>0) { 
+      withProgress(message = 'Calculation in progress',
+                   detail = 'This may take a while...', value = 0, {
+                     return(IndicatorsDataGHO(input$GHOID))
                    })
     }
     
