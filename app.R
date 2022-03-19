@@ -193,7 +193,7 @@ server <- function(input, output) {
   
   reticulate::source_python("data/SearchIndicatorsWB.py")
   reticulate::source_python("data/SearchIndicatorsGHO.py")
-  reticulate::source_python("data/IndicatorsGHO.py")
+  reticulate::source_python("data/MetadataWB.py")
   reticulate::source_python("data/DataWB.py")
   reticulate::source_python("data/DataGHO.py")
   
