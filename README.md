@@ -22,6 +22,6 @@ We will also use reticulate package as we will use `python` in `R`.
   <dd>This project is to ease the process of seeking data of indicators that are on Global Health Observatory database<br/> With the application you just provide the appropriate indicator's code and the data of this indicator will be brought out.  </dd>
 </dl>
 
-> You can access the live application on : **[Set of Predictions Using R Shiny] (https://jogf1d-didier-ilboudo.shinyapps.io/MachineLearningModels/)** <br/>
-> The full code is accessible on my Github : **[Go to Github] (https://github.com/daidi06/ShinyR)** <br/>
-> Please contact me on : **[email] (ildidier@hotmail.com)**
+> You can access the live application on : **[Set of Predictions Using R Shiny](https://jogf1d-didier-ilboudo.shinyapps.io/MachineLearningModels/)** <br/>
+> The full code is accessible on my Github : **[Go to Github](https://github.com/daidi06/ShinyR)** <br/>
+> Please contact me on : **[email](ildidier@hotmail.com)**
