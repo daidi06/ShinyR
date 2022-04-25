@@ -24,4 +24,4 @@ We will also use reticulate package as we will use `python` in `R`.
 
 > You can access the live application on : **[Set of Predictions Using R Shiny](https://jogf1d-didier-ilboudo.shinyapps.io/MachineLearningModels/)** <br/>
 > The full code is accessible on my Github : **[Go to Github](https://github.com/daidi06/ShinyR)** <br/>
-> Please contact me on : **[email](ildidier@hotmail.com)**
+> Please contact me on : **[My Email](mailto:ildidier@hotmail.com)**
